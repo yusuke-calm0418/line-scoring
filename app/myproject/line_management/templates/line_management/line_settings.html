@@ -1,0 +1,15 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="flex-grow p-8 bg-bg">
+        <h1 class="text-3xl font-bold mb-8">LINE設定</h1>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="bg-primary text-white px-4 py-2 rounded-md mt-8">保存</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

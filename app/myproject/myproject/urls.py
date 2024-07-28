@@ -19,6 +19,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('scoring.urls')),  # ルートURLをscoringアプリに渡す
+    path('', include('user_management.urls')),  # ルートURLをuser_managementアプリに渡す
+    path('callback/', include('line_management.urls')),  # ルートURLをuser_managementアプリに渡す
+    path('score/', include('score_management.urls')),  # ルートURLをuser_managementアプリに渡す
+    
 ]
 

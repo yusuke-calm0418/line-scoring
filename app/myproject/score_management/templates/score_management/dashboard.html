@@ -1,0 +1,138 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block CSS %}
+
+{% endblock %}
+{% block content %}
+<!-- メインコンテンツのみ -->
+<div class="flex-grow p-8 bg-bg">
+    <h1 class="text-3xl font-bold mb-8">ダッシュボード</h1>
+
+    <!-- 直近のアクションとアクション率 -->
+    <div class="flex mb-8 space-x-8">
+        <div class="w-1/2 bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-4 text-textmain">直近のアクション</h2>
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-6 border-b-2 text-textmain text-sm">日付</th>
+                        <th class="py-2 px-6 border-b-2 text-textmain text-sm">名前</th>
+                        <th class="py-2 px-6 border-b-2 text-textmain text-sm">アクションの種類</th>
+                        <th class="py-2 px-6 border-b-2 text-textmain text-sm">トリガー</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-6 border-b text-sm">2024-05-29</td>
+                        <td class="py-2 px-6 border-b text-sm">山田 太郎</td>
+                        <td class="py-2 px-6 border-b text-sm">
+                            <span class="inline-block bg-blue-100 text-blue-800 py-1 px-3 rounded-full text-sm">リンククリック</span>
+                        </td>
+                        <td class="py-2 px-6 border-b text-sm">ホームページ</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-6 border-b text-sm">2024-05-29</td>
+                        <td class="py-2 px-6 border-b text-sm">佐藤 花子</td>
+                        <td class="py-2 px-6 border-b">
+                            <span class="inline-block bg-green-100 text-green-800 py-1 px-3 rounded-full text-sm">発話</span>
+                        </td>
+                        <td class="py-2 px-6 border-b text-sm">「こんにちは」</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="w-1/2 bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-4 text-textmain">アクション率</h2>
+            <p>アクション率のグラフがここに表示されます。</p>
+        </div>
+    </div>
+    <!-- スコアランク -->
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold mb-4">スコアランク</h2>
+        <table class="min-w-full bg-white">
+            <thead>
+                <tr>
+                    <th class="py-2 px-6 border-b-2">ランキング
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                        </svg>
+                    </th>
+                    <th class="py-2 px-6 border-b-2">スコア
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                        </svg>
+                    </th>
+                    <th class="py-2 px-6 border-b-2">名前
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                        </svg>
+                    </th>
+                    <th class="py-2 px-6 border-b-2">最終アクション
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                        </svg>
+                    </th>
+                    <th class="py-2 px-6 border-b-2">ステータス
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                        </svg>
+                    </th>
+                    <th class="py-2 px-6 border-b-2">メモ
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                        </svg>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="py-2 px-6 border-b text-center">1</td>
+                    <td class="py-2 px-6 border-b text-center">1500</td>
+                    <td class="py-2 px-6 border-b text-center">山田 太郎</td>
+                    <td class="py-2 px-6 border-b text-center">2024-05-29</td>
+                    <td class="py-2 px-6 border-b text-center">
+                        <span class="inline-block bg-status1 text-white py-1 px-3 rounded-full text-sm">対応中</span>
+                    </td>
+                    <td class="py-2 px-6 border-b text-center">VIP顧客</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-6 border-b text-center">2</td>
+                    <td class="py-2 px-6 border-b text-center">1300</td>
+                    <td class="py-2 px-6 border-b text-center">佐藤 花子</td>
+                    <td class="py-2 px-6 border-b text-center">2024-05-29</td>
+                    <td class="py-2 px-6 border-b text-center">
+                        <span class="inline-block bg-status2 text-white py-1 px-3 rounded-full text-sm">未対応</span>
+                    </td>
+                    <td class="py-2 px-6 border-b text-center">新規顧客</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-6 border-b text-center">3</td>
+                    <td class="py-2 px-6 border-b text-center">1300</td>
+                    <td class="py-2 px-6 border-b text-center">佐藤 花子</td>
+                    <td class="py-2 px-6 border-b text-center">2024-05-29</td>
+                    <td class="py-2 px-6 border-b text-center">
+                        <span class="inline-block bg-status2 text-white py-1 px-3 rounded-full text-sm">未対応</span>
+                    </td>
+                    <td class="py-2 px-6 border-b text-center">新規顧客</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-6 border-b text-center">4</td>
+                    <td class="py-2 px-6 border-b text-center">1300</td>
+                    <td class="py-2 px-6 border-b text-center">佐藤 花子</td>
+                    <td class="py-2 px-6 border-b text-center">2024-05-29</td>
+                    <td class="py-2 px-6 border-b text-center">
+                        <span class="inline-block bg-status2 text-white py-1 px-3 rounded-full text-sm">未対応</span>
+                    </td>
+                    <td class="py-2 px-6 border-b text-center">新規顧客</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% endblock %}
+<!-- 
+    {% block JS %}
+    <script>
+        // ページごとのJSを記述する
+    </script>
+    {% endblock %} -->
