@@ -1,3 +1,4 @@
+<!-- score_management/score_settings.html -->
 {% extends "base_dashboard.html" %}
 {% load static %}
 {% load custom_tags %}
@@ -6,103 +7,124 @@
 
 {% endblock %}
 {% block content %}
-    <!-- メインコンテンツ -->
-    <!-- スコア設定フォーム -->
-    <div class="flex flex-col p-8 bg-bg w-full">
-        <div class="bg-white p-6 rounded-lg shadow-lg mb-8 w-full">
-            <h2 class="text-xl font-semibold mb-4 text-textmain">スコア設定</h2>
-            <form action="{% url 'score_settings' %}" method="post" class="flex w-full justify-between space-x-4">
-                {% csrf_token %}
-                <!-- アクションの種類 -->
-                <div class="mb-4 w-1/12">
-                    <label for="action_type" class="block text-gray-700 font-bold mb-4 text-sm text-center">Action</label>
-                    <select id="action_type" name="action_type" class="w-full px-4 py-2 border focus:outline-none focus:ring focus:border-blue-300" required>
-                        <option value="link">リンク</option>
-                        <option value="speech">発話</option>
-                    </select>
-                </div>
-                <!-- トリガー -->
-                <div class="mb-4 w-5/12">
-                    <label for="trigger" class="block text-gray-700 font-bold mb-4 text-sm text-center">トリガー</label>
-                    <input type="text" id="trigger" name="trigger" class="w-full px-3 py-2 border focus:outline-none focus:ring focus:border-blue-300" required>
-                </div>
-                <!-- スコア -->
-                <div class="mb-4 w-1/12">
-                    <label for="score" class="block text-gray-700 font-bold mb-4 text-sm text-center">スコア</label>
-                    <input type="number" id="score" name="score" class="w-full px-3 py-2 border focus:outline-none focus:ring focus:border-blue-300" required>
-                </div>
-                <!-- メモ -->
-                <div class="mb-4 w-1/3">
-                    <label for="memo" class="block text-gray-700 font-bold mb-4 text-sm text-center">メモ</label>
-                    <textarea id="memo" name="memo" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" rows="3"></textarea>
-                </div>
-                <!-- 送信ボタン -->
-                <div class="flex justify-end items-center ml-4 w-1/12">
-                    <button type="submit" class="bg-primary w-full text-white text-sm font-bold py-2 px-8 rounded-md hover:bg-opacity-80">保存</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- 設定した内容の表示 -->
-        <div class="bg-white p-6 rounded-lg shadow-lg w-full">
-            <h2 class="text-xl font-semibold mb-4 text-textmain">設定した内容</h2>
-            <table class="min-w-full bg-white" id="sortable-table">
-                <thead>
-                    <tr>
-                        <th class="py-2 px-4 border-b-2 text-textmain text-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
-                            </svg>
-                        </th>
-                        <th class="py-2 px-4 border-b-2 text-textmain text-sm">アクションの種類</th>
-                        <th class="py-2 px-4 border-b-2 text-textmain text-sm">トリガー</th>
-                        <th class="py-2 px-4 border-b-2 text-textmain text-sm">スコア</th>
-                        <th class="py-2 px-4 border-b-2 text-textmain text-sm">メモ</th>
-                        <th class="py-2 px-4 border-b-2 text-textmain text-sm">操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for score in scores %}
-                    <tr>
-                        <td class="py-2 px-4 border-b text-sm text-center cursor-move">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
-                            </svg>
-                        </td>
-                        <td class="py-2 px-4 border-b text-sm text-center">
-                            {% if score.action_type == 'link' %}
-                            <span class="inline-block bg-blue-100 text-blue-800 py-1 px-3 rounded-full text-sm">リンク</span>
-                            {% else %}
-                            <span class="inline-block bg-green-100 text-green-800 py-1 px-3 rounded-full text-sm">発話</span>
-                            {% endif %}
-                        </td>
-                        <td class="py-2 px-4 border-b text-sm text-center">
-                            {% if score.action_type == 'link' %}
-                            <a href="{% url 'track_link' score.trigger|urlencode %}" class="text-blue-500 hover:underline">{{ score.trigger }}</a>
-                            {% else %}
-                            {{ score.trigger }}
-                            {% endif %}
-                        </td>
-                        <td class="py-2 px-4 border-b text-sm text-center">{{ score.score }}</td>
-                        <td class="py-2 px-4 border-b text-sm text-center">{{ score.memo }}</td>
-                        <td class="py-2 px-4 border-b text-sm text-center">
-                            <button class="text-blue-500 hover:underline">編集</button>
-                            <button class="text-red-500 hover:underline ml-4">削除</button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var sortable = new Sortable(document.getElementById('sortable-table').getElementsByTagName('tbody')[0], {
-                    animation: 150,
-                    handle: '.cursor-move',
-                    ghostClass: 'sortable-ghost'
-                });
-            });
-        </script>
+<!-- メインコンテンツ -->
+<!-- スコア設定フォーム -->
+<div class="flex flex-col p-8 bg-bg w-full">
+    <div class="bg-white p-6 rounded-lg shadow-lg mb-8 w-full">
+        <h2 class="text-xl font-semibold mb-4 text-textmain">スコア設定</h2>
+        <form action="{% url 'score_settings' %}" method="post" class="flex w-full justify-between space-x-4">
+            {% csrf_token %}
+            <!-- アクションの種類 -->
+            <div class="mb-4 w-1/12">
+                <label for="action_type" class="block text-gray-700 font-bold mb-4 text-sm text-center">Action</label>
+                <select id="action_type" name="action_type" class="w-full px-4 py-2 border focus:outline-none focus:ring focus:border-blue-300" required>
+                    <option value="link">リンク</option>
+                    <option value="speech">発話</option>
+                </select>
+            </div>
+            <!-- トリガー -->
+            <div class="mb-4 w-5/12">
+                <label for="trigger" class="block text-gray-700 font-bold mb-4 text-sm text-center">トリガー</label>
+                <input type="text" id="trigger" name="trigger" class="w-full px-3 py-2 border focus:outline-none focus:ring focus:border-blue-300" required>
+            </div>
+            <!-- スコア -->
+            <div class="mb-4 w-1/12">
+                <label for="score" class="block text-gray-700 font-bold mb-4 text-sm text-center">スコア</label>
+                <input type="number" id="score" name="score" class="w-full px-3 py-2 border focus:outline-none focus:ring focus:border-blue-300" required>
+            </div>
+            <!-- タグ選択 -->
+            <!-- タグ名 -->
+            <div class="mb-4 w-1/3">
+                <label for="tag_name" class="block text-gray-700 font-bold mb-4 text-sm text-center">タグ名</label>
+                <input type="text" id="tag_name" name="tag_name" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+            <!-- タグカラー -->
+            <div class="mb-4 w-1/3">
+                <label for="tag_color" class="block text-gray-700 font-bold mb-4 text-sm text-center">タグカラー</label>
+                <input type="color" id="tag_color" name="tag_color" class="w-full h-10 border focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+            <!-- メモ -->
+            <div class="mb-4 w-1/3">
+                <label for="memo" class="block text-gray-700 font-bold mb-4 text-sm text-center">メモ</label>
+                <textarea id="memo" name="memo" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" rows="3"></textarea>
+            </div>
+            <!-- 送信ボタン -->
+            <div class="flex justify-end items-center ml-4 w-1/12">
+                <button type="submit" class="bg-primary w-full text-white text-sm font-bold py-2 px-8 rounded-md hover:bg-opacity-80">保存</button>
+            </div>
+        </form>
     </div>
+
+    <!-- 設定した内容の表示 -->
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full">
+        <h2 class="text-xl font-semibold mb-4 text-textmain">設定した内容</h2>
+        <table class="min-w-full bg-white" id="sortable-table">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 border-b-2 text-textmain text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
+                        </svg>
+                    </th>
+                    <th class="py-2 px-4 border-b-2 text-textmain text-sm">アクションの種類</th>
+                    <th class="py-2 px-4 border-b-2 text-textmain text-sm">トリガー</th>
+                    <th class="py-2 px-6 border-b-2 text-textmain text-sm">タグ</th>
+
+                    <th class="py-2 px-4 border-b-2 text-textmain text-sm">スコア</th>
+                    <th class="py-2 px-4 border-b-2 text-textmain text-sm">メモ</th>
+                    <th class="py-2 px-4 border-b-2 text-textmain text-sm">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for score in scores %}
+                <tr>
+                    <td class="py-2 px-4 border-b text-sm text-center cursor-move">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
+                        </svg>
+                    </td>
+                    <!-- アクションの種類 -->
+                    <td class="py-2 px-4 border-b text-sm text-center">
+                        {% if score.action_type == 'link' %}
+                        <span class="inline-block bg-blue-100 text-blue-800 py-1 px-3 rounded-full text-sm">リンク</span>
+                        {% else %}
+                        <span class="inline-block bg-green-100 text-green-800 py-1 px-3 rounded-full text-sm">発話</span>
+                        {% endif %}
+                    </td>
+                    <!-- トリガー -->
+                    <td class="py-2 px-4 border-b text-sm text-center">
+                        {% if score.action_type == 'link' %}
+                        <a href="{% url 'track_link' score.id %}" class="text-blue-500 hover:underline">{{ score.trigger }}</a>
+                        {% else %}
+                        {{ score.trigger }}
+                        {% endif %}
+                    </td>
+                    <!-- タグ -->
+                    <td class="py-2 px-6 border-b text-sm text-center">
+                        <span class="inline-block py-1 px-3 rounded-full text-sm text-white" style="background-color: {{ score.tag.color }};">
+                            {{ score.tag.name }}
+                        </span>
+                    </td>
+                    <td class="py-2 px-4 border-b text-sm text-center">{{ score.score }}</td>
+                    <td class="py-2 px-4 border-b text-sm text-center">{{ score.memo }}</td>
+                    <td class="py-2 px-4 border-b text-sm text-center">
+                        <button class="text-blue-500 hover:underline">編集</button>
+                        <button class="text-red-500 hover:underline ml-4">削除</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var sortable = new Sortable(document.getElementById('sortable-table').getElementsByTagName('tbody')[0], {
+                animation: 150,
+                handle: '.cursor-move',
+                ghostClass: 'sortable-ghost'
+            });
+        });
+    </script>
+</div>
 {% endblock %}

@@ -1,63 +1,74 @@
 <!-- ユーザーアクション一覧ページ -->
+<!-- line_management/user_info.html -->
 {% extends "base_dashboard.html" %}
 {% load static %}
 
 {% block CSS %}
-
 {% endblock %}
+
 {% block content %}
+<!-- メインコンテンツ -->
+<div class="flex-grow p-8 bg-bg">
+    <h1 class="text-3xl font-bold mb-8">ユーザー情報</h1>
 
-    <!-- メインコンテンツ -->
-    <div class="flex-grow p-8 bg-bg">
-        <h1 class="text-3xl font-bold mb-8">ユーザー情報</h1>
+    <!-- ユーザーのアクション一覧 -->
+    <div class="flex mb-8">
+        <div class="w-3/5 bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-4 text-textmain">ユーザーのアクション一覧</h2>
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-6 border-b-2 text-textmain text-sm">ID</th>
+                        <th class="py-2 px-6 border-b-2 text-textmain text-sm">名前</th>
+                        <th class="py-2 px-6 border-b-2 text-textmain text-sm">最終アクション</th>
+                        <th class="py-2 px-6 border-b-2 text-textmain text-sm">ステータス</th>
+                        <th class="py-2 px-6 border-b-2 text-textmain text-sm">メモ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for action in actions %}
+                    <tr class="cursor-pointer" onclick="loadUserDetails('{{ action.line_friend.id }}')">
+                        <td class="py-2 px-6 border-b text-sm text-center">{{ action.line_friend.id }}</td>
+                        <td class="py-2 px-6 border-b text-sm text-center">{{ action.line_friend.display_name }}</td>
+                        <td class="py-2 px-6 border-b text-sm text-center">{{ action.date }}</td>
+                        <td class="py-2 px-6 border-b text-sm text-center">
+                            <span class="inline-block bg-status1 text-white py-1 px-3 rounded-full text-sm">{{ action.action_type }}</span>
+                        </td>
+                        <td class="py-2 px-6 border-b text-sm text-center">{{ action.memo }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-        <!-- ユーザーのアクション一覧 -->
-        <div class="flex mb-8">
-            <div class="w-3/5 bg-white p-6 rounded-lg shadow-lg">
-                <h2 class="text-xl font-semibold mb-4 text-textmain">ユーザーのアクション一覧</h2>
-                <table class="min-w-full bg-white">
-                    <thead>
-                        <tr>
-                            <th class="py-2 px-6 border-b-2 text-textmain text-sm">ID</th>
-                            <th class="py-2 px-6 border-b-2 text-textmain text-sm">名前</th>
-                            <th class="py-2 px-6 border-b-2 text-textmain text-sm">最終アクション</th>
-                            <th class="py-2 px-6 border-b-2 text-textmain text-sm">ステータス</th>
-                            <th class="py-2 px-6 border-b-2 text-textmain text-sm">メモ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for action in actions %}
-                        <tr class="cursor-pointer" onclick="window.location='{% url 'line_friend_detail' action.line_friend.id %}'">
-                            <td class="py-2 px-6 border-b text-sm text-center">{{ action.line_friend.id }}</td>
-                            <td class="py-2 px-6 border-b text-sm text-center">{{ action.line_friend.display_name }}</td>
-                            <td class="py-2 px-6 border-b text-sm text-center">{{ action.date }}</td>
-                            <td class="py-2 px-6 border-b text-sm text-center">
-                                <span class="inline-block bg-status1 text-white py-1 px-3 rounded-full text-sm">{{ action.action_type }}</span>
-                            </td>
-                            <td class="py-2 px-6 border-b text-sm text-center">{{ action.memo }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        <!-- ユーザーの詳細 -->
+        <div class="w-2/5 bg-second p-6 rounded-lg shadow-lg ml-8" id="user-details-container">
+            <h2 class="text-xl font-semibold mb-4 text-textmain">ユーザーの詳細</h2>
+            <p>ユーザーの詳細を表示するには、左側のアクション一覧からユーザーを選択してください。</p>
+        </div>
+    </div>
+</div>
 
-            <!-- ユーザーの詳細 -->
-            <div class="w-2/5 bg-second p-6 rounded-lg shadow-lg ml-8">
-                <h2 class="text-xl font-semibold mb-4 text-textmain">ユーザーの詳細</h2>
-                {% if line_friend %}
+<script>
+function loadUserDetails(userId) {
+    fetch(`/api/user/${userId}/`)
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('user-details-container');
+            container.innerHTML = `
                 <div class="space-y-4">
                     <div class="text-center">
-                        <img src="{{ line_friend.picture_url }}" alt="アカウント画像" class="w-32 h-32 rounded-full mx-auto mb-4">
-                        <p class="text-textmain">{{ line_friend.display_name }}</p>
+                        <img src="${data.picture_url}" alt="アカウント画像" class="w-32 h-32 rounded-full mx-auto mb-4">
+                        <p class="text-textmain">${data.display_name}</p>
                     </div>
                     <div class="flex justify-center items-center rounded-lg p-4 mb-4">
                         <div class="text-center border-2 border-primary border-r-0 rounded-tl-lg rounded-bl-lg bg-white px-4 py-2">
                             <h3 class="text-lg font-semibold text-textmain">Total Score</h3>
-                            <p class="text-2xl font-bold text-textmain">{{ line_friend.total_score }}</p>
+                            <p class="text-2xl font-bold text-textmain">${data.total_score}</p>
                         </div>
                         <div class="text-center border-2 border-primary rounded-tr-lg rounded-br-lg bg-white px-4 py-2">
                             <h3 class="text-lg font-semibold text-textmain">Final Action</h3>
-                            <p class="py-1 text-textmain">{{ line_friend.final_action_date }}</p>
+                            <p class="py-1 text-textmain">${data.final_action_date}</p>
                         </div>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-lg">
@@ -65,29 +76,29 @@
                         <div class="space-y-4">
                             <div class="flex bg-gray-100 py-2 px-4 rounded-lg">
                                 <h3 class="w-2/5 font-semibold text-textmain">ID</h3>
-                                <p class="text-textmain">{{ line_friend.id }}</p>
+                                <p class="text-textmain">${data.line_user_id}</p>
                             </div>
                             <div class="flex bg-white py-2 px-4 rounded-lg">
                                 <h3 class="w-2/5 font-semibold text-textmain">ステータス:</h3>
                                 <p class="text-textmain">
-                                    <span class="inline-block bg-status1 text-white py-1 px-3 rounded-full text-sm">{{ line_friend.status }}</span>
+                                    <span class="inline-block bg-status1 text-white py-1 px-3 rounded-full text-sm">${data.status}</span>
                                 </p>
                             </div>
                             <div class="flex bg-gray-100 py-2 px-4 rounded-lg">
                                 <h3 class="w-2/5 font-semibold text-textmain">メモ:</h3>
-                                <p class="text-textmain text-sm">{{ line_friend.memo }}</p>
+                                <p class="text-textmain text-sm">${data.memo}</p>
                             </div>
                             <div class="flex bg-white py-2 px-4 rounded-lg">
-                                <h3 class="w-2/5 font-semibold text-textmain">詳細:</h3>
+                                <h3 class="w-2/5 font-semibold text-textmain">タグ:</h3>
                                 <div class="text-textmain text-sm">
-                                    {{ line_friend.details|linebreaksbr }}
+                                    ${data.tags.map(tag => `<span class="inline-block py-1 px-3 rounded-full text-sm text-white" style="background-color: ${tag.color};">${tag.name}</span>`).join(' ')}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                {% else %}
-                <p>ユーザーの詳細を表示するには、左側のアクション一覧からユーザーを選択してください。</p>
-                {% endif %}
-            </div>
+            `;
+        });
+}
+</script>
 {% endblock %}

@@ -5,7 +5,7 @@ from .models import ScoreSetting, StatusSetting
 class ScoreSettingForm(forms.ModelForm):
     class Meta:
         model = ScoreSetting
-        fields = ['action_type', 'trigger', 'score', 'memo']
+        fields = ['action_type', 'trigger', 'score', 'tag', 'memo']
         widgets = {
             'action_type': forms.Select(choices=ScoreSetting.ACTION_TYPE_CHOICES),
         }

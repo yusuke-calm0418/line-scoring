@@ -1,0 +1,43 @@
+<!-- templates/line_management/line_friends_list.html -->
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto p-8">
+    <h1 class="text-2xl font-bold mb-4">LINE友達一覧</h1>
+    <table class="min-w-full bg-white shadow-md rounded-lg">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 border-b-2 text-gray-600 text-left">アイコン</th>
+                <th class="py-2 px-4 border-b-2 text-gray-600 text-left">表示名</th>
+                <th class="py-2 px-4 border-b-2 text-gray-600 text-left">トータルスコア</th>
+                <th class="py-2 px-4 border-b-2 text-gray-600 text-left">最終アクションの日付</th>
+                <th class="py-2 px-4 border-b-2 text-gray-600 text-left">ID</th>
+                <th class="py-2 px-4 border-b-2 text-gray-600 text-left">ステータス</th>
+                <th class="py-2 px-4 border-b-2 text-gray-600 text-left">タグ</th>
+                <th class="py-2 px-4 border-b-2 text-gray-600 text-left">メモ</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in line_friends_data %}
+            <tr>
+                <td class="py-2 px-4 border-b">
+                    <img src="{{ data.friend.picture_url }}" alt="Icon" class="w-8 h-8 rounded-full">
+                </td>
+                <td class="py-2 px-4 border-b">{{ data.friend.display_name }}</td>
+                <td class="py-2 px-4 border-b">{{ data.friend.total_score }}</td>
+                <td class="py-2 px-4 border-b">{{ data.final_action_date }}</td>
+                <td class="py-2 px-4 border-b">{{ data.friend.id }}</td>
+                <td class="py-2 px-4 border-b">{{ data.status }}</td>
+                <td class="py-2 px-4 border-b">
+                    {% for tag in data.tags %}
+                    <span class="inline-block" style="background-color: {{ tag.color }}; color: white; padding: 0.5em; border-radius: 4px;">{{ tag.name }}</span>
+                    {% endfor %}
+                </td>
+                <td class="py-2 px-4 border-b">{{ data.memo }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,10 +1,10 @@
+# line_management/models.py
 from django.db import models
 from user_management.models import CustomUser
 from django.conf import settings
 
-# LINE友達を取得する
+# LINE友達テーブル
 class LineFriend(models.Model):
-    user = models.ForeignKey(CustomUser, related_name='line_friends', on_delete=models.CASCADE)
     line_user_id = models.CharField(max_length=255, unique=True)
     display_name = models.CharField(max_length=255)
     picture_url = models.URLField(null=True, blank=True)
@@ -15,7 +15,28 @@ class LineFriend(models.Model):
     
     def total_score(self):
         return self.userscore_set.aggregate(total=models.Sum('score'))['total'] or 0
+    
+# タグテーブル
+class Tag(models.Model):
+    name = models.CharField(max_length=100)
+    color = models.CharField(max_length=7)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.name
+
+# LineFriend と Tag を結ぶ中間テーブル (多対多の関係を管理)
+class LineFriendTag(models.Model):
+    line_friend = models.ForeignKey(LineFriend, on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.line_friend.display_name} - {self.tag.name}"
+    
+# ユーザーのアクションを取得する
 class UserAction(models.Model):
     line_friend = models.ForeignKey(LineFriend, related_name='actions', on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
@@ -35,3 +56,16 @@ class LineSettings(models.Model):
 
     def __str__(self):
         return f"LINE Settings for {self.user.email}"
+
+
+# 配信設定テーブル
+# メッセージ配信
+class GreetingMessage(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    message_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Greeting Message by {self.user.email} at {self.created_at}"
+

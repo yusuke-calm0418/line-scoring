@@ -22,6 +22,6 @@ urlpatterns = [
     path('', include('user_management.urls')),  # ルートURLをuser_managementアプリに渡す
     path('callback/', include('line_management.urls')),  # ルートURLをuser_managementアプリに渡す
     path('score/', include('score_management.urls')),  # ルートURLをuser_managementアプリに渡す
-    
+    path('line/', include('line_management.urls')),  # line_managementアプリの他のURLパターンを追加
 ]
 

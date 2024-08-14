@@ -29,7 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    '5907-118-238-234-205.ngrok-free.app',  # NgrokのURLをここに追加
+    'eb84-2001-268-98c3-9d35-f150-2ed2-1921-e472.ngrok-free.app',  # NgrokのURLをここに追加
 ]
 
 # Application definition
@@ -46,8 +46,6 @@ INSTALLED_APPS = [
 ]
 
 AUTH_USER_MODEL = 'user_management.CustomUser'
-
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
