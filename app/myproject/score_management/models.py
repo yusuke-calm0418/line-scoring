@@ -12,7 +12,7 @@ class ScoreSetting(models.Model):
         ('speech', '発話'),
     ]
     action_type = models.CharField(max_length=10, choices=ACTION_TYPE_CHOICES)
-    trigger = models.CharField(max_length=100)
+    trigger = models.CharField(max_length=500)
     score = models.IntegerField()
     memo = models.TextField(blank=True, null=True)
     tag = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True, blank=True)
